@@ -7,8 +7,10 @@ public class GameSystemScript : MonoBehaviour
 {
     public GameObject asteroidPrefab;
     public GameObject basicEnemyPrefab;
+    public GameObject laserEnemyPrefab;
     public float asteroidSpawnDelay = 3f; // delay between asteroid spawns
     public float basicEnemySpawnDelay = 5f; // delay between enemy spawns
+    public float laserEnemySpawnDelay = 10f; // delay between laser enemy spawns
     public float spawnDistance = 2f; // how far beyond the screen edge to spawn asteroids
     private float cameraWidth;
     // public float cameraWidth = 
@@ -32,6 +34,7 @@ public class GameSystemScript : MonoBehaviour
     private float startLevelTime;
     private float nextAsteroidSpawnTime;
     private float nextBasicEnemySpawnTime;
+    private float nextLaserEnemySpawnTime;
 
     [SerializeField] private float score = 0.0f;
 
@@ -54,7 +57,7 @@ public class GameSystemScript : MonoBehaviour
         }
     }
 
-    public void AsteroidSpawner(){
+    public void AsteroidSpawner(float delayScale){
         // Check if it's time to spawn a new asteroid
         if (Time.time >= nextAsteroidSpawnTime)
         {
@@ -62,12 +65,12 @@ public class GameSystemScript : MonoBehaviour
             createAsteroid();
 
             // Set the next spawn time based on the spawn delay
-            nextAsteroidSpawnTime = Time.time + asteroidSpawnDelay;
+            nextAsteroidSpawnTime = Time.time + asteroidSpawnDelay*delayScale;
         }
         // return false;
     }
 
-    public void BasicEnemySpawner(){
+    public void BasicEnemySpawner(float delayScale){
         // Check if it's time to spawn a new asteroid
         if (Time.time >= nextBasicEnemySpawnTime)
         {
@@ -75,9 +78,17 @@ public class GameSystemScript : MonoBehaviour
             createEnemy();
 
             // Set the next spawn time based on the spawn delay
-            nextBasicEnemySpawnTime = Time.time + basicEnemySpawnDelay;
+            nextBasicEnemySpawnTime = Time.time + basicEnemySpawnDelay*delayScale;
         }
-        // return false;
+    }
+
+    public void LaserEnemySpawner(float delayScale){
+        if (Time.time >= nextLaserEnemySpawnTime)
+        {
+            createLaserEnemy();
+
+            nextLaserEnemySpawnTime = Time.time + laserEnemySpawnDelay*delayScale;
+        }
     }
 
 
@@ -129,6 +140,31 @@ public class GameSystemScript : MonoBehaviour
             // Calculate the direction from the enemy to the center of the screen with some deviation
             float dirX = (xMiddle - xPos) + Random.Range(-deviationSpeedX, deviationSpeedX);
             float dirY = (yMiddle - verticalSpawnPos) + Random.Range(-deviationSpeedY, deviationSpeedY);
+            Vector2 direction = new Vector2(dirX, dirY).normalized;
+
+            // Set the enemy's parent to this spawner object for organization
+            enemy.transform.parent = transform;
+            Rigidbody2D enemyRigidbody = enemy.GetComponent<Rigidbody2D>();
+            enemyRigidbody.velocity = direction*globalEntitySpeed;
+    }
+
+    void createLaserEnemy(){
+            int randomSide = Random.Range(0, 2) == 0 ? -1 : 1; // -1 means left, +1 means right
+            // Calculate a random position along the top edge of the screen
+            float xPos = 1.0f * randomSide * (cameraWidth/2.0f);
+
+            int upOrDown = Random.Range(0, 2) == 0 ? -1 : 1;
+            float verticalSpawnPos = upOrDown == 1 ? -Camera.main.orthographicSize + 1.0f: Camera.main.orthographicSize -1.0f;
+            
+            Vector3 spawnPos = new Vector3(xPos, verticalSpawnPos, 0f);
+
+
+            // Instantiate a new enemy prefab at the random position
+            GameObject enemy = Instantiate(laserEnemyPrefab, spawnPos, Quaternion.Euler(0, 0, (-upOrDown+1)/2*180));
+
+            // Calculate the direction from the enemy to the center of the screen with some deviation
+            float dirX = (-randomSide);
+            float dirY = 0;
             Vector2 direction = new Vector2(dirX, dirY).normalized;
 
             // Set the enemy's parent to this spawner object for organization

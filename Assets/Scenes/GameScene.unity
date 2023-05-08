@@ -219,7 +219,7 @@ GameObject:
   - component: {fileID: 555056765}
   m_Layer: 0
   m_Name: GameSystem
-  m_TagString: Untagged
+  m_TagString: GameController
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -253,8 +253,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   asteroidPrefab: {fileID: 2828357043356912259, guid: fc13b74b5ffd7b549aa98dc0fbcf2262, type: 3}
   basicEnemyPrefab: {fileID: 2828357043356912259, guid: 4b5dee64c94d6f04d92c415d167b1dfc, type: 3}
+  laserEnemyPrefab: {fileID: 2828357043356912259, guid: 8f1c05aaf477c6045afb14cfdce49ad8, type: 3}
   asteroidSpawnDelay: 3
   basicEnemySpawnDelay: 5
+  laserEnemySpawnDelay: 2
   spawnDistance: 2
   globalEntitySpeed: 1
   asteroidScaleVariety: 0.5
@@ -268,24 +270,24 @@ MonoBehaviour:
       - m_Target: {fileID: 555056765}
         m_TargetAssemblyTypeName: GameSystemScript, Assembly-CSharp
         m_MethodName: AsteroidSpawner
-        m_Mode: 1
+        m_Mode: 4
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
-          m_FloatArgument: 0
+          m_FloatArgument: 1
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
       - m_Target: {fileID: 555056765}
         m_TargetAssemblyTypeName: GameSystemScript, Assembly-CSharp
         m_MethodName: BasicEnemySpawner
-        m_Mode: 1
+        m_Mode: 4
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
-          m_FloatArgument: 0
+          m_FloatArgument: 1
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
@@ -301,6 +303,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 555056765}
+        m_TargetAssemblyTypeName: GameSystemScript, Assembly-CSharp
+        m_MethodName: LaserEnemySpawner
+        m_Mode: 4
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 1
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   - m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 555056765}
@@ -311,7 +325,7 @@ MonoBehaviour:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
-          m_FloatArgument: 5
+          m_FloatArgument: 10
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
