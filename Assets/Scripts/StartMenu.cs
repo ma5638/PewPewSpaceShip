@@ -7,6 +7,6 @@ public class StartMenu : MonoBehaviour
 {
     public void LoadSceneByName()
     {
-        SceneManager.LoadScene("AsteroidDemo");
+        SceneManager.LoadScene("GameScene");
     }
 }

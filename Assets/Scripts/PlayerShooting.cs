@@ -40,7 +40,7 @@ public class PlayerShooting : MonoBehaviour {
 
 			// Game Over
 			// Debug.Log("Game Over!");
-			// SceneManager.LoadScene("End");
+			SceneManager.LoadScene("End");
         }
     }
 }
