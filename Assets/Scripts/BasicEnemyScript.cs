@@ -11,12 +11,16 @@ public class BasicEnemyScript : MonoBehaviour
 
     public GameObject bulletPrefab;
     public float bulletOffset = 0.8f;
-    public float fireDelay = 3.0f;
     private float coolDown = 0.5f;
-    public float fireCoolDown = 1.0f;
+    public float fireCoolDown = 4.0f;
+
+    // Reference to the mainCamera
+    private Camera mainCamera;
+    private float destroyOffset = 4f;
 
     void Start()
     {
+        mainCamera = Camera.main;
         // find player object (so we can look at it in the Update)
         GameObject playerObject = GameObject.FindWithTag("player");
         playerTransform = playerObject.transform;
@@ -34,21 +38,42 @@ public class BasicEnemyScript : MonoBehaviour
         timeToLive -= Time.deltaTime;
         coolDown -= Time.deltaTime;
 
-        if (health <= 0 || timeToLive <= 0.0f){
-            Destroy(gameObject); // disappear from hierarchy
+        if (!IsVisibleFromCameraWithOffset() || health <= 0.0f)
+        {
+            // Destroy the asteroid game object
+            Destroy(gameObject);
         }
 
         if (coolDown <= 0.0f){
             float scale = transform.localScale.y;
             coolDown = fireCoolDown;
-            Debug.Log(gameObject.GetComponent<BoxCollider2D>().size.y);
-            Vector3 bulletPosition = transform.position + transform.up * (scale*gameObject.GetComponent<BoxCollider2D>().size.y/2 + bulletOffset);
-            GameObject bullet = Instantiate(bulletPrefab, bulletPosition, transform.rotation);
+            if (IsVisibleFromCamera()){
+                Vector3 bulletPosition = transform.position + transform.up * (scale*gameObject.GetComponent<BoxCollider2D>().size.y/2 + bulletOffset);
+                GameObject bullet = Instantiate(bulletPrefab, bulletPosition, transform.rotation);
+            }
         }
     }
 
+    private bool IsVisibleFromCameraWithOffset()
+    {
+        // Get the bounds of the camera view
+        Bounds camBounds = new Bounds(mainCamera.transform.position, new Vector3(mainCamera.orthographicSize * 2f * mainCamera.aspect, mainCamera.orthographicSize * 2f, 50f));
+        camBounds.Expand(destroyOffset);
+        // Check if the asteroid is within the mainCamera's view
+        return camBounds.Intersects(GetComponent<SpriteRenderer>().bounds);
+    }
+
+    bool IsVisibleFromCamera()
+    {
+        // Get the bounds of the camera view
+        var planes = GeometryUtility.CalculateFrustumPlanes(mainCamera);
+
+        // Check if the asteroid is within the camera's view
+        return GeometryUtility.TestPlanesAABB(planes, GetComponent<SpriteRenderer>().bounds);
+    }
+
     void OnTriggerEnter2D(Collider2D col){
-        string colTag = col.gameObject.tag;
-        health--;
+        // string colTag = col.gameObject.tag;
+        // health--;
     }
 }
