@@ -5,6 +5,7 @@ using UnityEngine;
 public class LaserEnemyScript : MonoBehaviour
 {
     public int health = 1;
+    public int points = 20;
 
 
     public GameObject bulletPrefab;
@@ -31,6 +32,12 @@ public class LaserEnemyScript : MonoBehaviour
 
         if (!IsVisibleFromCameraWithOffset() || health <= 0.0f)
         {
+            if (health <= 0.0f)
+            {
+                GameObject gameController = GameObject.FindWithTag("GameController");
+                GameSystemScript gameSystem = gameController.GetComponent<GameSystemScript>();
+                gameSystem.AddScore(points);
+            }
             // Destroy the asteroid game object
             Destroy(gameObject);
         }
@@ -64,7 +71,13 @@ public class LaserEnemyScript : MonoBehaviour
     }
 
     void OnTriggerEnter2D(Collider2D col){
-        // string colTag = col.gameObject.tag;
-        // health--;
+        if (col.CompareTag("playerBullet"))
+        {
+            // Apply damage to the enemy's health
+            health--;
+
+            // Destroy the bullet
+            Destroy(col.gameObject);
+        }
     }
 }

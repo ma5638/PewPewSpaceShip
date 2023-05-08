@@ -5,7 +5,7 @@ using UnityEngine;
 public class BasicEnemyScript : MonoBehaviour
 {
     public int health = 1;
-    private float timeToLive = 20.0f;
+    public int points = 50;
     private Transform playerTransform;
 
 
@@ -35,12 +35,18 @@ public class BasicEnemyScript : MonoBehaviour
         transform.rotation = rotation;
 
 
-        timeToLive -= Time.deltaTime;
         coolDown -= Time.deltaTime;
 
         if (!IsVisibleFromCameraWithOffset() || health <= 0.0f)
         {
-            // Destroy the asteroid game object
+            
+            if (health <= 0.0f)
+            {
+                GameObject gameController = GameObject.FindWithTag("GameController");
+                GameSystemScript gameSystem = gameController.GetComponent<GameSystemScript>();
+                gameSystem.AddScore(points);
+            }
+            
             Destroy(gameObject);
         }
 
@@ -73,7 +79,13 @@ public class BasicEnemyScript : MonoBehaviour
     }
 
     void OnTriggerEnter2D(Collider2D col){
-        // string colTag = col.gameObject.tag;
-        // health--;
+        if (col.CompareTag("playerBullet"))
+        {
+            // Apply damage to the enemy's health
+            health--;
+
+            // Destroy the bullet
+            Destroy(col.gameObject);
+        }
     }
 }
