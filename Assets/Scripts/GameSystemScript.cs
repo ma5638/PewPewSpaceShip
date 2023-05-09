@@ -2,12 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.UI;
 
 public class GameSystemScript : MonoBehaviour
 {
     public GameObject asteroidPrefab;
     public GameObject basicEnemyPrefab;
     public GameObject laserEnemyPrefab;
+    public Text scoreText;
     public float asteroidSpawnDelay = 3f; // delay between asteroid spawns
     public float basicEnemySpawnDelay = 5f; // delay between enemy spawns
     public float laserEnemySpawnDelay = 10f; // delay between laser enemy spawns
@@ -36,12 +38,13 @@ public class GameSystemScript : MonoBehaviour
     private float nextBasicEnemySpawnTime;
     private float nextLaserEnemySpawnTime;
 
-    [SerializeField] private float score = 0.0f;
+    [SerializeField] private int score = 0;
 
 
     void Start(){
         cameraWidth = Camera.main.orthographicSize * 2f * Camera.main.aspect;
         startLevelTime = Time.time;
+        PlayerPrefs.SetInt("score", 0);
     }
 
     void Update()
@@ -173,7 +176,9 @@ public class GameSystemScript : MonoBehaviour
             enemyRigidbody.velocity = direction*globalEntitySpeed;
     }
 
-    public void AddScore(float s){
+    public void AddScore(int s){
         score += s;
+        scoreText.text = score.ToString();
+        PlayerPrefs.SetInt("score", score);
     }
 }
