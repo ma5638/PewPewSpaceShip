@@ -122,6 +122,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   health: 1
   rotationSpeed: 50
+  points: 10
+  explosionPrefab: {fileID: 3689096964859442441, guid: ebeaf97010e8621479623ea5517f0d9a, type: 3}
 --- !u!58 &5114023719659141463
 CircleCollider2D:
   m_ObjectHideFlags: 0

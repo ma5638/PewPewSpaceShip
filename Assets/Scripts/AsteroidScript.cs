@@ -8,6 +8,7 @@ public class AsteroidScript : MonoBehaviour
     public int health = 1;
     public float rotationSpeed = 50.0f;
     public int points = 10;
+	public GameObject explosionPrefab;
 
     // Reference to the Camera.main
     private float destroyOffset = 4f;
@@ -25,6 +26,14 @@ public class AsteroidScript : MonoBehaviour
             Destroy(gameObject);
             if (health <= 0.0f)
             {
+                GameObject explosion = Instantiate(explosionPrefab, transform.position, transform.rotation);
+
+                ParticleSystem explosionParticleSystem = explosion.GetComponent<ParticleSystem>();
+                if (explosionParticleSystem != null)
+                {
+                    explosionParticleSystem.Play();
+                }
+
                 GameObject gameController = GameObject.FindWithTag("GameController");
                 GameSystemScript gameSystem = gameController.GetComponent<GameSystemScript>();
                 gameSystem.AddScore(points);

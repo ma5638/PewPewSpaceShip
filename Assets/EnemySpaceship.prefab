@@ -121,9 +121,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 1
+  points: 50
   bulletPrefab: {fileID: 8908948782904559620, guid: fa09b7dcb8113154b81d027b731768b4, type: 3}
   bulletOffset: 0.8
   fireCoolDown: 2.5
+  explosionPrefab: {fileID: 3689096964859442441, guid: ebeaf97010e8621479623ea5517f0d9a, type: 3}
 --- !u!61 &8433024656240525814
 BoxCollider2D:
   m_ObjectHideFlags: 0

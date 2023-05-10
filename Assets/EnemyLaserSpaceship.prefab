@@ -137,6 +137,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 1
+  points: 20
   bulletPrefab: {fileID: 8908948782904559620, guid: fa09b7dcb8113154b81d027b731768b4, type: 3}
   bulletOffset: 0.2
   fireCoolDown: 4
+  explosionPrefab: {fileID: 3689096964859442441, guid: ebeaf97010e8621479623ea5517f0d9a, type: 3}

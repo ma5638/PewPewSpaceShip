@@ -13,6 +13,7 @@ public class BasicEnemyScript : MonoBehaviour
     public float bulletOffset = 0.8f;
     private float coolDown = 0.5f;
     public float fireCoolDown = 4.0f;
+	public GameObject explosionPrefab;
 
     // Reference to the mainCamera
     private Camera mainCamera;
@@ -42,6 +43,14 @@ public class BasicEnemyScript : MonoBehaviour
             
             if (health <= 0.0f)
             {
+                GameObject explosion = Instantiate(explosionPrefab, transform.position, transform.rotation);
+
+                ParticleSystem explosionParticleSystem = explosion.GetComponent<ParticleSystem>();
+                if (explosionParticleSystem != null)
+                {
+                    explosionParticleSystem.Play();
+                }
+                
                 GameObject gameController = GameObject.FindWithTag("GameController");
                 GameSystemScript gameSystem = gameController.GetComponent<GameSystemScript>();
                 gameSystem.AddScore(points);
